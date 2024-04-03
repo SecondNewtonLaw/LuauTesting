@@ -59,6 +59,10 @@ void Scheduler::Execute(SchedulerJob *job) {
     lua_pcall(nLs, 0, 0, 0);
 }
 
+lua_State *Scheduler::GetGlobalState() {
+    return this->m_lsInitialisedWith;
+}
+
 void Scheduler::InitializeWith(lua_State *L) {
     std::thread([this]() {
         while (true) {

@@ -21,6 +21,7 @@ class Scheduler {
     std::queue<SchedulerJob> m_sjJobs;
 
     SchedulerJob GetSchedulerJob();
+
 public:
     //#region Static Members
     static Scheduler *GetSingleton();
@@ -31,4 +32,6 @@ public:
     void ScheduleJob(const std::string &luaCode);
 
     void InitializeWith(lua_State *L);
+
+    lua_State *GetGlobalState();
 };
