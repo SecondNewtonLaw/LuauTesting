@@ -156,11 +156,6 @@ int httpget(lua_State *L) {
     return 1;
 }
 
-int printidentity(lua_State *L) {
-    lua_pushstring(L, "Current identity is 8");
-    return print(L);
-}
-
 int Environment::Register(lua_State *L, bool useInitScript) {
     static const luaL_Reg reg[] = {
             {("getreg"),        getreg},
@@ -169,7 +164,6 @@ int Environment::Register(lua_State *L, bool useInitScript) {
             {("print"),         print},
             {("warn"),          warn},
             {("error"),         error},
-            {("printidentity"), printidentity},
             {("HttpGet"),       httpget},
             {nullptr,           nullptr},
     };
