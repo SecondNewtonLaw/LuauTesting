@@ -18,6 +18,7 @@
 #include "Dependencies/Luau/VM/src/lgc.h"
 #include "ClosureLibrary.hpp"
 #include "DebugLibrary.hpp"
+#include "Scheduler.hpp"
 
 Environment *Environment::singleton = nullptr;
 
@@ -33,7 +34,10 @@ int getreg(lua_State *L) {
 }
 
 int getgenv(lua_State *L) {
-    lua_pushvalue(L, LUA_GLOBALSINDEX);
+    auto scheduler{Scheduler::GetSingleton()};
+    lua_State *gL = scheduler->GetGlobalState();
+    lua_pushvalue(gL, LUA_GLOBALSINDEX);
+    lua_xmove(gL, L, 1);
     return 1;
 }
 
@@ -158,14 +162,14 @@ int httpget(lua_State *L) {
 
 int Environment::Register(lua_State *L, bool useInitScript) {
     static const luaL_Reg reg[] = {
-            {("getreg"),        getreg},
-            {("getgc"),         getgc},
-            {("getgenv"),       getgenv},
-            {("print"),         print},
-            {("warn"),          warn},
-            {("error"),         error},
-            {("HttpGet"),       httpget},
-            {nullptr,           nullptr},
+            {("getreg"),  getreg},
+            {("getgc"),   getgc},
+            {("getgenv"), getgenv},
+            {("print"),   print},
+            {("warn"),    warn},
+            {("error"),   error},
+            {("HttpGet"), httpget},
+            {nullptr,     nullptr},
     };
 
     lua_pushvalue(L, LUA_GLOBALSINDEX);
